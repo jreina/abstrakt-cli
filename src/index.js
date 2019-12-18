@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const program = require("commander");
 const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
