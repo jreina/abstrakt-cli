@@ -10,14 +10,17 @@
   "author": "Johnny Reina",
   "license": "MIT",
   "dependencies": {
-    "commander": "^4.0.1"
+    "@octokit/rest": "^16.35.2",
+    "commander": "^4.0.1",
+    "github-oauth": "^0.2.2",
+    "openurl": "^1.1.1"
   },
   "bin": {
     "abstrakt": ".\\src\\index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ShittyLabs/where-the-fuck-is-my-time"
+    "url": "https://github.com/ShittyLabs/abstrakt"
   },
-  "homepage": "https://github.com/ShittyLabs/where-the-fuck-is-my-time"
+  "homepage": "https://github.com/ShittyLabs/abstrakt"
 }

@@ -3,12 +3,13 @@
 const program = require("commander");
 const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
-const LogManager = require("./LogManager");
+const LogManager = require("./managers/LogManager");
+const GistManager = require("./managers/GistManager");
 
 const makeEntryFor = category => subject => {
   const mgr = new LogManager();
   const entry = new LogEntry(category, new Date().toISOString(), subject);
-  mgr.addLogEntry(entry);
+  return mgr.addLogEntry(entry);
 };
 
 program
@@ -26,15 +27,15 @@ switchCase(
     work: makeEntryFor("work"),
     create: makeEntryFor("create"),
     learn: makeEntryFor("learn"),
-    view: () => {
+    view: async () => {
       const mgr = new LogManager();
-      mgr.listLogEntries().forEach(x => console.log(x));
+      (await mgr.listLogEntries()).forEach(x => console.log(x));
     },
     end: () => makeEntryFor("end")("end"),
     delete: id => {
       console.log(`Dropping log entry ${id}`);
       const mgr = new LogManager();
-      mgr.dropLogEntry(id);
+      return mgr.dropLogEntry(id);
     }
   },
   program,
