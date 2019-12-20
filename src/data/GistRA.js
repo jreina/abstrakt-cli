@@ -51,8 +51,8 @@ class GistRA {
    */
   async update(content, gistId) {
     content = JSON.stringify(content);
-    return gh.gists.update({
-      gistId,
+    return this.github.gists.update({
+      gist_id: gistId,
       files: {
         "log.json": {
           content
