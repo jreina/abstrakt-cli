@@ -4,6 +4,7 @@ const program = require("commander");
 const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
 const LogManager = require("./managers/LogManager");
+const {version} = require('../package.json');
 
 const makeEntryFor = category => subject => {
   const mgr = new LogManager();
@@ -13,6 +14,7 @@ const makeEntryFor = category => subject => {
 
 program
   .name("abstrakt")
+  .version(version)
   .option("-w, --work <subject>", "add an entry for work code")
   .option("-c, --create <subject>", "add an entry for creative/personal code")
   .option("-l, --learn <subject>", "add an entry for learning")
