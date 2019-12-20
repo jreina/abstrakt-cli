@@ -8,6 +8,9 @@ class TokenRA {
     this._currentLog = path.join(this._logPath, "/auth.json");
     this._ensureLog();
   }
+  /**
+   * @returns {Promise<string>}
+   */
   async load() {
     const local = this._fromFile();
     if (local) return local;

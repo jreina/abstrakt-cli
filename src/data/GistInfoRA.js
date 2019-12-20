@@ -8,6 +8,9 @@ class GistInfoRA {
     this._currentLog = path.join(this._logPath, "/gistinfo.json");
     this._ensureLog();
   }
+  /**
+   * @returns {string}
+   */
   load() {
     return this._read();
   }
@@ -25,7 +28,7 @@ class GistInfoRA {
   }
   _read() {
     const data = fs.readFileSync(this._currentLog, { encoding: "utf8" });
-    return JSON.parse(data);
+    return JSON.parse(data).gist_id;
   }
 }
 

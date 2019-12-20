@@ -1,23 +1,41 @@
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
-const GistManager = require("./GistManager");
+const GistRA = require("../data/GistRA");
+const TokenRA = require("../data/TokenRA");
+const GistInfoRA = require("../data/GistInfoRA");
 
 module.exports = class LogManager {
   constructor() {}
+  /**
+   * 
+   * @param {number} idToDelete 
+   */
   async dropLogEntry(idToDelete) {
-    const data = JSON.parse(await GistManager.load());
+    const token = await TokenRA.load();
+    const ra = new GistRA(token);
+    const gistId = GistInfoRA.load();
+    if(!gistId) return console.log("Nothing to drop");
+    const data = await ra.load(gistId);
     const items = data.filter(({ id }) => id !== idToDelete);
-    return GistManager.updateGist(items);
+    return ra.update(items, gistId);
   }
   async addLogEntry(entry) {
-    const items = JSON.parse(await GistManager.load());
-    const maxId = items.map(x => x.id).reduce((a, b) => (a > b ? a : b), 0);
+    
+    const token = await TokenRA.load();
+    const ra = new GistRA(token);
+    const gistId = GistInfoRA.load();
+    if(!gistId) {
+      const id = await ra.create();
+      GistInfoRA.save(id);
+    }
+    const data = await ra.load(gistId);
+
+    const maxId = data.map(x => x.id).reduce((a, b) => (a > b ? a : b), 0);
     entry.setId(maxId + 1);
-    items.push(entry);
-    GistManager.updateGist(JSON.stringify(items));
+    data.push(entry);
+    return ra.update(data, gistId);
   }
-  listLogEntries() {
-    return GistManager.load().then(x => JSON.parse(x));
+  async listLogEntries() {
+    const token = await TokenRA.load();
+    const ra = new GistRA(token);
+    return ra.load(GistInfoRA.load());
   }
 };

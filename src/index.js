@@ -4,7 +4,6 @@ const program = require("commander");
 const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
 const LogManager = require("./managers/LogManager");
-const GistManager = require("./managers/GistManager");
 
 const makeEntryFor = category => subject => {
   const mgr = new LogManager();
