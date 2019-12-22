@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const prop = key => obj => obj[key];
 const max = (a, b) => (a > b ? a : b);
 const len = x => x.length;
@@ -22,14 +24,20 @@ function formatRow(columnLengths, item, joinChar = " ", seperatorChar = "|") {
     .map(([key, value]) =>
       padStart(
         padEnd(toString(value), columnLengths[key], joinChar),
-        columnLengths[key] + 2,
+        columnLengths[key] + 1,
         joinChar
       )
     )
     .join(seperatorChar);
 }
 
+function formatTime(obj) {
+    obj.time = moment(obj.time).format('MM/DD/YYYY HH:mm:ss');
+    return obj;
+}
+
 module.exports = function formatTable(items) {
+    items = items.map(formatTime);
   const columns = Object.keys(items[0]);
   const columnLengths = columns.reduce((memo, val) => {
     memo[val] =
