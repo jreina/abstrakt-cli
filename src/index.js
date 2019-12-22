@@ -5,6 +5,7 @@ const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
 const LogManager = require("./managers/LogManager");
 const {version} = require('../package.json');
+const formatTable = require('./utils/format-table');
 
 const makeEntryFor = category => subject => {
   const mgr = new LogManager();
@@ -30,7 +31,9 @@ switchCase(
     learn: makeEntryFor("learn"),
     view: async () => {
       const mgr = new LogManager();
-      (await mgr.listLogEntries()).forEach(x => console.log(x));
+      const items = await mgr.listLogEntries();
+      const table = formatTable(items);
+      console.log(table);
     },
     end: () => makeEntryFor("end")("end"),
     delete: id => {
