@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 const program = require("commander");
-const switchCase = require("./switchCase");
+const switchCase = require("./utils/switchCase");
 const LogEntry = require("./LogEntry");
 const LogManager = require("./managers/LogManager");
+const GistInfoManager = require('./managers/GistInfoManager');
 const { version } = require("../package.json");
 const formatTable = require("./utils/format-table");
 
@@ -21,6 +22,7 @@ program
   .option("-l, --learn <subject>", "add an entry for learning")
   .option("-e, --end", "add an end entry")
   .option("-v, --view", "view all log entries")
+  .option("-s, --set-gist <id>", "set the Gist ID to use on this computer")
   .option("-d, --delete <id>", "delete a log entry", parseInt)
   .parse(process.argv);
 
@@ -40,6 +42,10 @@ switchCase(
       console.log(`Dropping log entry ${id}`);
       const mgr = new LogManager();
       return mgr.dropLogEntry(id);
+    },
+    setGist: id => {
+      const mgr = new GistInfoManager();
+      return mgr.save(id);
     }
   },
   program,
