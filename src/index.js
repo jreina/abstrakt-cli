@@ -4,8 +4,8 @@ const program = require("commander");
 const switchCase = require("./switchCase");
 const LogEntry = require("./LogEntry");
 const LogManager = require("./managers/LogManager");
-const {version} = require('../package.json');
-const formatTable = require('./utils/format-table');
+const { version } = require("../package.json");
+const formatTable = require("./utils/format-table");
 
 const makeEntryFor = category => subject => {
   const mgr = new LogManager();

@@ -15,7 +15,7 @@ class GistInfoRA {
     return this._read();
   }
   save(gist_id) {
-    this._save({ gist_id })
+    this._save({ gist_id });
   }
   _ensureLog() {
     if (!fs.existsSync(this._logPath)) fs.mkdirSync(this._logPath);

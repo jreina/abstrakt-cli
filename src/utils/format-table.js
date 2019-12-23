@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require("moment");
 
 const prop = key => obj => obj[key];
 const max = (a, b) => (a > b ? a : b);
@@ -32,12 +32,12 @@ function formatRow(columnLengths, item, joinChar = " ", seperatorChar = "|") {
 }
 
 function formatTime(obj) {
-    obj.time = moment(obj.time).format('MM/DD/YYYY HH:mm:ss');
-    return obj;
+  obj.time = moment(obj.time).format("MM/DD/YYYY HH:mm:ss");
+  return obj;
 }
 
 module.exports = function formatTable(items) {
-    items = items.map(formatTime);
+  items = items.map(formatTime);
   const columns = Object.keys(items[0]);
   const columnLengths = columns.reduce((memo, val) => {
     memo[val] =
