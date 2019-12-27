@@ -4,7 +4,14 @@
   "description": "Create time logs for abstract categories",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommmit": "lint-staged",
+    "prettier": "prettier --write \"**/*.js\""
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "Johnny Reina",
@@ -14,6 +21,7 @@
     "commander": "^4.0.1",
     "github-oauth": "^0.2.2",
     "got": "^10.1.0",
+    "moment": "^2.24.0",
     "openurl": "^1.1.1"
   },
   "bin": {
@@ -23,5 +31,10 @@
     "type": "git",
     "url": "https://github.com/ShittyLabs/abstrakt"
   },
-  "homepage": "https://github.com/ShittyLabs/abstrakt"
+  "homepage": "https://github.com/ShittyLabs/abstrakt",
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1"
+  }
 }

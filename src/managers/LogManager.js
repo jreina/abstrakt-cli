@@ -5,24 +5,23 @@ const GistInfoRA = require("../data/GistInfoRA");
 module.exports = class LogManager {
   constructor() {}
   /**
-   * 
-   * @param {number} idToDelete 
+   *
+   * @param {number} idToDelete
    */
   async dropLogEntry(idToDelete) {
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = GistInfoRA.load();
-    if(!gistId) return console.log("Nothing to drop");
+    if (!gistId) return console.log("Nothing to drop");
     const data = await ra.load(gistId);
     const items = data.filter(({ id }) => id !== idToDelete);
     return ra.update(items, gistId);
   }
   async addLogEntry(entry) {
-    
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = GistInfoRA.load();
-    if(!gistId) {
+    if (!gistId) {
       const id = await ra.create();
       GistInfoRA.save(id);
     }
