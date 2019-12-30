@@ -25,7 +25,7 @@
     "openurl": "^1.1.1"
   },
   "bin": {
-    "abstrakt": ".\\src\\index.js"
+    "abstrakt": "src\\index.js"
   },
   "repository": {
     "type": "git",

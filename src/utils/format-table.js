@@ -37,6 +37,7 @@ function formatTime(obj) {
 }
 
 module.exports = function formatTable(items) {
+  if(items.length === 0) return "No entries yet";
   items = items.map(formatTime);
   const columns = Object.keys(items[0]);
   const columnLengths = columns.reduce((memo, val) => {

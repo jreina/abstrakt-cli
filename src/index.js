@@ -3,7 +3,9 @@
 const program = require("commander");
 const switchCase = require("./utils/switchCase");
 const LogEntry = require("./LogEntry");
+const DailyLogEntry = require("./DailyLogEntry");
 const LogManager = require("./managers/LogManager");
+const DailyLogManager = require("./managers/DailyLogManager");
 const GistInfoManager = require('./managers/GistInfoManager');
 const { version } = require("../package.json");
 const formatTable = require("./utils/format-table");
@@ -24,6 +26,8 @@ program
   .option("-v, --view", "view all log entries")
   .option("-s, --set-gist <id>", "set the Gist ID to use on this computer")
   .option("-d, --delete <id>", "delete a log entry", parseInt)
+  .option("-m, --mood <number>", "add a mood entry", parseInt)
+  .option("-o, --overall", "view mood entries")
   .parse(process.argv);
 
 switchCase(
@@ -46,6 +50,17 @@ switchCase(
     setGist: id => {
       const mgr = new GistInfoManager();
       return mgr.save(id);
+    },
+    mood: (num) => {
+      const mgr = new DailyLogManager();
+      const entry = new DailyLogEntry(new Date().toISOString(), num);
+      return mgr.addLogEntry(entry);
+    },
+    overall: async () => {
+      const mgr = new DailyLogManager();
+      const items = await mgr.listLogEntries();
+      const table = formatTable(items);
+      console.log(table);
     }
   },
   program,

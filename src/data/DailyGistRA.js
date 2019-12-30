@@ -3,7 +3,7 @@ const GistInfoRA = require("../data/GistInfoRA");
 const github = require("@octokit/rest");
 const got = require("got");
 
-class GistRA {
+class DailyGistRA {
   /**
    *
    * @param {string} token
@@ -30,7 +30,7 @@ class GistRA {
    */
   async load(gistId) {
     const gists = await this.github.gists.get({ gist_id: gistId });
-    const file = gists.data.files["log.json"];
+    const file = gists.data.files["daily.json"];
     if(!file) return [];
     if (file.truncated) {
       const { body } = await got(file.raw_url);
@@ -58,7 +58,7 @@ class GistRA {
     return this.github.gists.update({
       gist_id: gistId,
       files: {
-        "log.json": {
+        "daily.json": {
           content
         }
       }
@@ -66,4 +66,4 @@ class GistRA {
   }
 }
 
-module.exports = GistRA;
+module.exports = DailyGistRA;
