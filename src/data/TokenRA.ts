@@ -1,10 +1,15 @@
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
+import path from "path";
+import fs from "fs";
+import os from "os";
+import http from "http";
+import GithubOAuth from "github-oauth";
+import { TokenInfo } from "../models/TokenInfo";
 
 class TokenRA {
+  private _logPath: string;
+  private _currentLog: string;
   constructor() {
-    this._logPath = path.join(os.userInfo().homedir, "/.wtfimt");
+    this._logPath = path.join(os.userInfo().homedir, "/.esotrakt");
     this._currentLog = path.join(this._logPath, "/auth.json");
     this._ensureLog();
   }
@@ -15,29 +20,30 @@ class TokenRA {
     const local = this._fromFile();
     if (local) return local;
     const oauth = await this._fromOauth();
+    if(!oauth) throw new Error('Could not authenticate with GitHub!');
     return oauth;
   }
   _ensureLog() {
     if (!fs.existsSync(this._logPath)) fs.mkdirSync(this._logPath);
     if (!fs.existsSync(this._currentLog)) this._save({ token: null });
   }
-  _save(data) {
+  _save(data: TokenInfo) {
     fs.writeFileSync(this._currentLog, JSON.stringify(data), {
       encoding: "utf8"
     });
   }
-  _read() {
+  _read(): TokenInfo {
     const data = fs.readFileSync(this._currentLog, { encoding: "utf8" });
     return JSON.parse(data);
   }
-  _fromFile() {
+  _fromFile(): string | null {
     const { token } = this._read();
     return token;
   }
-  _fromOauth() {
-    const githubOAuth = require("github-oauth")({
-      githubClient: "4e0032121591ec7bf6eb",
-      githubSecret: "a626dd4594fe7736d3f88e85862fcaa3e5343b92",
+  _fromOauth(): Promise<string | null> {
+    const githubOAuth = GithubOAuth({
+      githubClient: "e522f5bed93e6015d935",
+      githubSecret: "c5f7989eb0cbcd449475dc8069b6e22e0134c512",
       baseURL: "http://localhost:9001",
       loginURI: "/login",
       callbackURI: "/callback",
@@ -45,8 +51,9 @@ class TokenRA {
     });
 
     return new Promise((resolve, reject) => {
-      this.server = require("http")
+      const server = http
         .createServer((req, res) => {
+          if (!req.url) return;
           if (req.url.match(/login/)) return githubOAuth.login(req, res);
           if (req.url.match(/callback/)) {
             githubOAuth.callback(req, res);
@@ -55,16 +62,15 @@ class TokenRA {
         })
         .listen(9001);
 
-      githubOAuth.on("error", err => {
+      githubOAuth.on("error", (err: Error) => {
         console.error("there was a login error", err);
-        this.server.close();
+        server.close();
         return reject(err);
       });
 
-      githubOAuth.on("token", (token, serverResponse) => {
-        console.log("<TOKEN=%s>", token.access_token);
+      githubOAuth.on("token", (token: { access_token: string | null }) => {
         this._save({ token: token.access_token });
-        this.server.close();
+        server.close();
         return resolve(token.access_token);
       });
 
@@ -73,4 +79,4 @@ class TokenRA {
   }
 }
 
-module.exports = new TokenRA();
+export default new TokenRA();
