@@ -8,7 +8,7 @@ const { version } = require("../package.json");
 import moment from "moment";
 
 program
-  .name("esotrakt")
+  .name("abstrakt")
   .version(version)
   .option("-r, --ref <data>", "create a ref entry")
   .option("-t, --tag <id> <data>", "add tag to an entry")
