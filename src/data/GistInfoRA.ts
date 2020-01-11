@@ -6,7 +6,7 @@ class GistInfoRA {
   _logPath: string;
   _currentLog: string;
   constructor() {
-    this._logPath = path.join(os.userInfo().homedir, "/.esotrakt");
+    this._logPath = path.join(os.userInfo().homedir, "/.abstrakt2");
     this._currentLog = path.join(this._logPath, "/gistinfo.json");
     this._ensureLog();
   }

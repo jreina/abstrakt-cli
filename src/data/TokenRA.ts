@@ -9,7 +9,7 @@ class TokenRA {
   private _logPath: string;
   private _currentLog: string;
   constructor() {
-    this._logPath = path.join(os.userInfo().homedir, "/.esotrakt");
+    this._logPath = path.join(os.userInfo().homedir, "/.abstrakt2");
     this._currentLog = path.join(this._logPath, "/auth.json");
     this._ensureLog();
   }

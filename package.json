@@ -1,7 +1,7 @@
 {
-  "name": "esotrakt",
+  "name": "abstrakt",
   "version": "0.0.8",
-  "description": "Create logs using an esoteric DSL",
+  "description": "Create and maintain logs",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,7 +24,6 @@
   "dependencies": {
     "@octokit/rest": "^16.35.2",
     "commander": "^4.0.1",
-    "esotrakt-compiler": "0.0.3",
     "github-oauth": "^0.2.2",
     "got": "^10.1.0",
     "lodash": "^4.17.15",
@@ -36,9 +35,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jreina/esotrakt"
+    "url": "https://github.com/jreina/abstrakt"
   },
-  "homepage": "https://github.com/jreina/esotrakt",
+  "homepage": "https://github.com/jreina/abstrakt",
   "devDependencies": {
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.1.2",

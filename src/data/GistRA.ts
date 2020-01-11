@@ -1,12 +1,13 @@
 import github from "@octokit/rest";
 import got from "got";
+import { CollectionItem } from "../models/CollectionItem";
 
 class GistRA {
   github: github;
   GIST_JSON_EMPTY: {
     description: string;
     public: boolean;
-    files: { "leftshift.txt": { content: string } };
+    files: { "abstrakt.v2.json": { content: string } };
   };
   /**
    *
@@ -17,7 +18,7 @@ class GistRA {
       description: "Esotrakt Entries",
       public: false,
       files: {
-        "leftshift.txt": {
+        "abstrakt.v2.json": {
           content: "0::" + new Date().getTime()
         }
       }
@@ -28,15 +29,15 @@ class GistRA {
    * @param {string} gistId
    * @returns {Array<{category: string, time: Date, subject: string, id: number}>}
    */
-  async load(gistId: string): Promise<Array<string>> {
+  async load(gistId: string): Promise<Array<CollectionItem>> {
     const gists = await this.github.gists.get({ gist_id: gistId });
     // @ts-ignore this is fucking stupid
-    const file = gists.data.files["leftshift.txt"];
+    const file = gists.data.files["abstrakt.v2.json"];
     if (file.truncated) {
       const { body } = await got(file.raw_url);
-      return body.split("\n");
+      return JSON.parse(body);;
     }
-    return file.content.split("\n");
+    return JSON.parse(file.content);
   }
 
   /**
@@ -51,13 +52,13 @@ class GistRA {
   /**
    *
    */
-  async update(content: Array<string>, gistId: string) {
+  async update(content: Array<CollectionItem>, gistId: string) {
     return this.github.gists.update({
       gist_id: gistId,
       files: {
         // @ts-ignore fix your fucking types
-        "leftshift.txt": {
-          content: content.join("\n")
+        "abstrakt.v2.json": {
+          content: JSON.stringify(content)
         }
       }
     });

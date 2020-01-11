@@ -3,6 +3,8 @@ import TokenRA from "../data/TokenRA";
 import GistInfoRA from "../data/GistInfoRA";
 import { hasId } from "../utils/hasId";
 import { not } from "../utils/not";
+import { CollectionItem } from "../models/CollectionItem";
+import { NewCollectionItem } from "../models/NewCollectionItem";
 
 export default class LogManager {
   constructor() {}
@@ -16,29 +18,43 @@ export default class LogManager {
     const gistId = GistInfoRA.load();
     if (!gistId) return console.log("Nothing to drop");
     const data = await ra.load(gistId);
-    const items = data.filter(line => line.split("::")[0] !== idToDelete);
+    const items = data.filter(line => line.id !== idToDelete);
     return ra.update(items, gistId);
   }
-  async addLogEntry(entry: string) {
+  async addRef(title: string) {
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = await this._ensureGist();
     const data = await ra.load(gistId);
 
-    const maxId =
-      data.map(x => +x.split("::")[0]).reduce((a, b) => (a > b ? a : b), 0) + 1;
+    const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
 
-    data.push(`${maxId}::${new Date().getTime()}::${entry}`);
+    data.push({ title, id: maxId.toString() });
     return ra.update(data, gistId);
   }
-  async editLogEntry(id: string, entry: string) {
+  async add(item: NewCollectionItem) {
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = await this._ensureGist();
     const data = await ra.load(gistId);
-    const newEntry = `${id}::${new Date().getTime()}::${entry}`;
 
-    const newEntries = data.filter(not(hasId(id))).concat(newEntry);
+    const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
+
+    data.push({ ...item, id: maxId.toString() });
+    return ra.update(data, gistId);
+  }
+  async editLogEntry(
+    id: string,
+    xform: (item: CollectionItem) => CollectionItem
+  ) {
+    const token = await TokenRA.load();
+    const ra = new GistRA(token);
+    const gistId = await this._ensureGist();
+    const data = await ra.load(gistId);
+
+    const newEntries = data.map(entry =>
+      entry.id === id ? xform(entry) : entry
+    );
 
     return ra.update(newEntries, gistId);
   }
