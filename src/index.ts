@@ -5,7 +5,6 @@ import switchCase from "./utils/switchCase";
 import LogManager from "./managers/LogManager";
 import GistInfoManager from "./managers/GistInfoManager";
 const { version } = require("../package.json");
-import formatTable from "./utils/format-table";
 import moment from "moment";
 
 program

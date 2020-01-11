@@ -1,8 +1,6 @@
 import GistRA from "../data/GistRA";
 import TokenRA from "../data/TokenRA";
 import GistInfoRA from "../data/GistInfoRA";
-import { hasId } from "../utils/hasId";
-import { not } from "../utils/not";
 import { CollectionItem } from "../models/CollectionItem";
 import { NewCollectionItem } from "../models/NewCollectionItem";
 
