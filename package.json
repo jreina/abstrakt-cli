@@ -1,15 +1,20 @@
 {
   "name": "abstrakt",
-  "version": "0.0.6",
-  "description": "Create time logs for abstract categories",
-  "main": "index.js",
+  "version": "0.0.8",
+  "description": "Create and maintain logs",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist",
     "precommmit": "lint-staged",
-    "prettier": "prettier --write \"**/*.js\""
+    "prepublishOnly": "npm run build",
+    "prettier": "prettier --write \"**/*.ts\"",
+    "start": "npm run build && node dist/index.js",
+    "debug": "npm run build && node --inspect-brk dist/index.js"
   },
   "lint-staged": {
-    "*.js": [
+    "*.ts": [
       "prettier --write"
     ]
   },
@@ -21,20 +26,28 @@
     "commander": "^4.0.1",
     "github-oauth": "^0.2.2",
     "got": "^10.1.0",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "openurl": "^1.1.1"
   },
   "bin": {
-    "abstrakt": ".\\src\\index.js"
+    "esotrakt": "dist/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ShittyLabs/abstrakt"
+    "url": "https://github.com/jreina/abstrakt"
   },
-  "homepage": "https://github.com/ShittyLabs/abstrakt",
+  "homepage": "https://github.com/jreina/abstrakt",
   "devDependencies": {
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.1.2",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
-    "prettier": "^1.19.1"
-  }
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.7.4"
+  },
+  "files": [
+    "dist"
+  ]
 }

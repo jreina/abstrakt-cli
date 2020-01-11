@@ -1,0 +1,1 @@
+export const hasId = (id: string) => (entry: string) => entry.startsWith(id);
