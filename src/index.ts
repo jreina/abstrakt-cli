@@ -82,7 +82,7 @@ switchCase(
           ? moment()
               .utc()
               .toISOString()
-          : moment(override, ["MM/DD/YYYY HH:MM", "MM/DD/YYYY"])
+          : moment(override, ["MM/DD/YYYY HH:mm", "MM/DD/YYYY"])
               .utc()
               .toISOString();
       const item = { start: time, ...template };
@@ -93,7 +93,7 @@ switchCase(
       const time =
         override !== undefined
           ? moment
-              .utc(override, ["MM/DD/YYYY HH:MM", "MM/DD/YYYY"])
+              .utc(override, ["MM/DD/YYYY HH:mm", "MM/DD/YYYY"])
               .toISOString()
           : moment()
               .utc()
