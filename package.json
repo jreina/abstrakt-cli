@@ -31,7 +31,7 @@
     "openurl": "^1.1.1"
   },
   "bin": {
-    "abstrakt": "dist/index.js"
+    "abstrakt": "dist/cli.js"
   },
   "repository": {
     "type": "git",

@@ -28,7 +28,8 @@ export default class LogManager {
     const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
 
     data.push({ title, id: maxId.toString() });
-    return ra.update(data, gistId);
+    await ra.update(data, gistId);
+    return maxId;
   }
   async add(item: NewCollectionItem) {
     const token = await TokenRA.load();
@@ -39,7 +40,8 @@ export default class LogManager {
     const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
 
     data.push({ ...item, id: maxId.toString() });
-    return ra.update(data, gistId);
+    await ra.update(data, gistId);
+    return maxId;
   }
   async editLogEntry(
     id: string,
@@ -54,7 +56,7 @@ export default class LogManager {
       entry.id === id ? xform(entry) : entry
     );
 
-    return ra.update(newEntries, gistId);
+    await ra.update(newEntries, gistId);
   }
   async listLogEntries() {
     const token = await TokenRA.load();
