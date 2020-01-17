@@ -55,7 +55,10 @@ switchCase(
     },
     start: async (id: string, override?: string) => {
       const newId = await abstrakt.start(id, override);
-      console.log(`Created start entry with ID ${newId}`);
+      console.log(
+        `Created start entry with ID ${newId}`,
+        override ? `overriding with time ${override}` : ""
+      );
     },
     end: async (id: string, override?: string) => {
       await abstrakt.end(id, override);

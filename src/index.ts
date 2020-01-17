@@ -52,8 +52,14 @@ export const abstrakt = {
         : moment(override, ["MM/DD/YYYY HH:mm", "MM/DD/YYYY"])
             .utc()
             .toISOString();
-    const item = { start: time, ...template };
-    return mgr.add(item);
+
+    if (template.start !== undefined) {
+      await mgr.editLogEntry(id, item => ({ ...item, start: time }));
+      return +id;
+    } else {
+      const item = { start: time, ...template };
+      return mgr.add(item);
+    }
   },
   end: async (id: string, override?: string) => {
     const mgr = new LogManager();
