@@ -3,7 +3,7 @@ import TokenRA from "../data/TokenRA";
 import GistInfoRA from "../data/GistInfoRA";
 import { CollectionItem } from "../models/CollectionItem";
 
-export default class Database<T extends CollectionItem> {
+export default class Database<T extends Partial<CollectionItem>> {
   constructor() {}
   /**
    * Delete an item by `id`
@@ -56,6 +56,7 @@ export default class Database<T extends CollectionItem> {
   }
   async list(): Promise<Array<T>> {
     const token = await TokenRA.load();
+    // @ts-ignore
     const ra = new GistRA<T>(token);
     const gistId = await this._ensureGist();
     return ra.load(gistId);

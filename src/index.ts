@@ -1,6 +1,7 @@
 import LogManager from "./managers/LogManager";
 import GistInfoManager from "./managers/GistInfoManager";
 import moment from "moment";
+import Database from "./managers/Database";
 
 export const abstrakt = {
   ref: (data: string) => {
@@ -103,3 +104,5 @@ export const abstrakt = {
     return await mgr.listLogEntries();
   }
 };
+
+export { Database };
