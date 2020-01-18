@@ -2,36 +2,27 @@ import GistRA from "../data/GistRA";
 import TokenRA from "../data/TokenRA";
 import GistInfoRA from "../data/GistInfoRA";
 import { CollectionItem } from "../models/CollectionItem";
-import { AbstraktEntry } from "../models/AbstraktEntry";
 
-export default class LogManager {
+export default class Database<T extends CollectionItem> {
   constructor() {}
   /**
-   *
-   * @param {number} idToDelete
+   * Delete an item by `id`
+   * @param {number} id
    */
-  async dropLogEntry(idToDelete: string) {
+  async delete(id: string): Promise<void> {
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = GistInfoRA.load();
-    if (!gistId) return console.log("Nothing to drop");
+    if (!gistId) return;
     const data = await ra.load(gistId);
-    const items = data.filter(line => line.id !== idToDelete);
-    return ra.update(items, gistId);
+    const items = data.filter(line => line.id !== id);
+    await ra.update(items, gistId);
   }
-  async addRef(title: string) {
-    const token = await TokenRA.load();
-    const ra = new GistRA<AbstraktEntry>(token);
-    const gistId = await this._ensureGist();
-    const data = await ra.load(gistId);
-
-    const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
-
-    data.push({ title, id: maxId.toString() });
-    await ra.update(data, gistId);
-    return maxId;
-  }
-  async add(item: AbstraktEntry) {
+  /**
+   * Insert an item and return the `id` of the new item.
+   * @param item 
+   */
+  async add(item: T): Promise<number> {
     const token = await TokenRA.load();
     const ra = new GistRA(token);
     const gistId = await this._ensureGist();
@@ -39,16 +30,21 @@ export default class LogManager {
 
     const maxId = data.reduce((a, { id }) => (a > +id ? a : +id), 0) + 1;
 
-    data.push({ ...item, id: maxId.toString() });
+    data.push({ ...item, id: maxId });
     await ra.update(data, gistId);
     return maxId;
   }
-  async editLogEntry(
+  /**
+   * Map over an item by its `id`
+   * @param id 
+   * @param xform 
+   */
+  async update(
     id: string,
-    xform: (item: AbstraktEntry) => AbstraktEntry
+    xform: (item: CollectionItem) => CollectionItem
   ) {
     const token = await TokenRA.load();
-    const ra = new GistRA<AbstraktEntry>(token);
+    const ra = new GistRA(token);
     const gistId = await this._ensureGist();
     const data = await ra.load(gistId);
 
@@ -58,9 +54,9 @@ export default class LogManager {
 
     await ra.update(newEntries, gistId);
   }
-  async listLogEntries(): Promise<Array<AbstraktEntry>> {
+  async list(): Promise<Array<T>> {
     const token = await TokenRA.load();
-    const ra = new GistRA<AbstraktEntry>(token);
+    const ra = new GistRA<T>(token);
     const gistId = await this._ensureGist();
     return ra.load(gistId);
   }

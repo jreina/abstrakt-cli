@@ -1,4 +1,5 @@
-export interface NewCollectionItem {
+export interface AbstraktEntry {
+    id: string;
     title: string;
     start?: string;
     end?: string;

@@ -2,7 +2,7 @@ import github from "@octokit/rest";
 import got from "got";
 import { CollectionItem } from "../models/CollectionItem";
 
-class GistRA {
+class GistRA<T extends CollectionItem> {
   github: github;
   GIST_JSON_EMPTY: {
     description: string;
@@ -29,7 +29,7 @@ class GistRA {
    * @param {string} gistId
    * @returns {Array<{category: string, time: Date, subject: string, id: number}>}
    */
-  async load(gistId: string): Promise<Array<CollectionItem>> {
+  async load(gistId: string): Promise<Array<T>> {
     const gists = await this.github.gists.get({ gist_id: gistId });
     // @ts-ignore this is fucking stupid
     const file = gists.data.files["abstrakt.v2.json"];
@@ -52,8 +52,8 @@ class GistRA {
   /**
    *
    */
-  async update(content: Array<CollectionItem>, gistId: string) {
-    return this.github.gists.update({
+  async update(content: Array<T>, gistId: string) {
+    await this.github.gists.update({
       gist_id: gistId,
       files: {
         // @ts-ignore fix your fucking types
